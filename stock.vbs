@@ -1,6 +1,7 @@
 Sub VbaStocks()
 For Each ws In Worksheets
     Dim opening As Double
+    'setting the opening to be the first value where open is
     opening = ws.Cells(2, 3).Value
     Dim closing As Double
     
@@ -15,9 +16,9 @@ For Each ws In Worksheets
     
     Dim Summary_Table_Row As Integer
     Summary_Table_Row = 2
-    
+    'range of where the for loop will be 
     RowCount = ws.Cells(Rows.Count, "A").End(xlUp).Row
-    
+    'header cells place value
     ws.Range("I1").Value = "Ticker"
     ws.Range("J1").Value = "Yearly Change"
     ws.Range("K1").Value = "Percent Change"
@@ -30,14 +31,16 @@ For Each ws In Worksheets
     
     
     For i = 2 To RowCount
+    'if the ticker values don't equal to each other
         If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
             Ticker = ws.Cells(i, 1).Value
             ws.Range("I" & Summary_Table_Row).Value = Ticker
-            
+            'closing value will be the value at open where the tickers don't match
             closing = ws.Cells(i, 6).Value
             
             YearlyChange = closing - opening
             ws.Range("J" & Summary_Table_Row).Value = YearlyChange
+            'setting the colors
             If YearlyChange >= 0 Then
                 ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 4
             Else
@@ -46,15 +49,16 @@ For Each ws In Worksheets
             
             PercentChange = (closing / opening) - 1
             ws.Range("K" & Summary_Table_Row).Value = PercentChange
+            'formatting the percent change
             ws.Range("K" & Summary_Table_Row).NumberFormat = "0.00%"
-            
+            'setting the new open value
             opening = Cells(i + 1, 3).Value
-            
+            'adding the volume
             TotalStockVolume = TotalStockVolume + ws.Cells(i, 7).Value
             ws.Range("L" & Summary_Table_Row).Value = TotalStockVolume
             TotalStockVolume = 0
             
-            
+            'adding to the row
             Summary_Table_Row = Summary_Table_Row + 1
         Else
             TotalStockVolume = TotalStockVolume + ws.Cells(i, 7).Value
