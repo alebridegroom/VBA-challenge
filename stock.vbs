@@ -52,7 +52,7 @@ For Each ws In Worksheets
             'formatting the percent change
             ws.Range("K" & Summary_Table_Row).NumberFormat = "0.00%"
             'setting the new open value
-            opening = Cells(i + 1, 3).Value
+            opening = ws.Cells(i + 1, 3).Value
             'adding the volume
             TotalStockVolume = TotalStockVolume + ws.Cells(i, 7).Value
             ws.Range("L" & Summary_Table_Row).Value = TotalStockVolume
